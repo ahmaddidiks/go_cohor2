@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>HTML</title>
+    </head>
+    <body>
+        <div>
+           <ul>
+            {{range $value := .}}
+            <li>
+                ID: {{$value.ID}},
+                Title: {{$value.Title}},
+                Stock: {{$value.Stock}},
+                Author: {{$value.Author}}
+            </li>
+            {{end}}
+           </ul>
+        </div>
+    </body>
+</html>
