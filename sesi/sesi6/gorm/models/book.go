@@ -14,8 +14,8 @@ type Book struct {
 	Author    string `gorm:"not null"`
 	Stock     int    `gorm:"not null"`
 	UserID    uint
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 func (b *Book) BeforeCreate(tx *gorm.DB) (err error) {

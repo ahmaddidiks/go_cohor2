@@ -9,12 +9,19 @@ import (
 func main() {
 	database.StartDB()
 
+	// fmt.Println("create user")
 	// createUser("didik@gmail.com")
+	// createUser("amalia@gmail.com")
 	// getUserByID(1)
-	createBook(1, "Buku test", "Penulis 2", 20)
+	fmt.Println("create book")
+	// createBook(1, "Buku Didik", "Penulis 1", 10)
+	createBook(1, "Buku Pinjam perpus", "Penulis 2", 20)
+	createBook(2, "Buku Pinjam Teman", "Penulis 2", 20)
 	// getUserWithBook()
 	// updateUSerByID(3, "ahmad@gmail.com")
-	deleteBookByID(1)
+	fmt.Println("delete book")
+	// deleteBookByID(22)
+	deleteBookByUserID(2)
 }
 
 func createUser(email string) {
@@ -85,31 +92,31 @@ func getUserWithBook() {
 	}
 
 	fmt.Println("User data with books")
-	fmt.Println(users)
+	fmt.Printf("%+v", users)
 }
 
 func deleteBookByID(id uint) {
-	// db := database.GetDB()
-	// book := models.Book{}
-
-	// err := db.Where("id = ?", id).Delete(&book).Error
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// fmt.Printf("Book with id %d has been deleted \n", id)
-
 	db := database.GetDB()
-
 	book := models.Book{}
 
 	err := db.Where("id = ?", id).Delete(&book).Error
 	if err != nil {
-		fmt.Println("Error deleting book:", err.Error())
-		return
+		panic(err)
 	}
 
-	fmt.Printf("Book with id %d has been successfully deleted", id)
+	fmt.Printf("Book with id %d has been deleted \n", id)
+}
+
+func deleteBookByUserID(id uint) {
+	db := database.GetDB()
+	book := models.Book{}
+
+	err := db.Where("user_id = ?", id).Delete(&book).Error
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Book with id %d has been deleted \n", id)
 }
 
 func updateUSerByID(id int, email string) {
