@@ -1,5 +1,8 @@
-module go_sql
+module challenge_6
 
-go 1.18
+go 1.21.3
 
-require github.com/mattn/go-sqlite3 v1.14.17 // indirect
+require (
+	github.com/go-sql-driver/mysql v1.7.1 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
+)
