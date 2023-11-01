@@ -1,11 +1,15 @@
 package routers
 
-import "github.com/gin-gonic/gin"
+import (
+	"rest-api/controllers"
+
+	"github.com/gin-gonic/gin"
+)
 
 func StartServer() *gin.Engine {
 	router := gin.Default()
 
-	router.POST("/orders", test)
+	router.POST("/orders", controllers.CreateOrder)
 	router.GET("/orders", test)
 
 	return router

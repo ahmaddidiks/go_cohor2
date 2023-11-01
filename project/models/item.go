@@ -14,6 +14,18 @@ type Item struct {
 	UpdatedAt   *time.Time
 }
 
+type ItemOrderRecv struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Quantity    int    `json:"quantity"`
+}
+
+type ItemRecv struct {
+	OrderAt      string          `json:"orderedAt"`
+	CustomerName string          `json:"customerName"`
+	Items        []ItemOrderRecv `json:"items"`
+}
+
 // func (b *Item) BeforeCreate(tx *gorm.DB) (err error) {
 // 	fmt.Println("Book befroe create")
 // 	return
