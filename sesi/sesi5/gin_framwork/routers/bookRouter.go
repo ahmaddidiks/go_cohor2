@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"go_cohort_2/sesi5/gin_framwork/controllers"
+	"gin/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +10,9 @@ func StartServer() *gin.Engine {
 	router := gin.Default()
 
 	router.POST("/book", controllers.CreateBook)
+	router.GET("/book/:bookID", controllers.GetBook)
+	router.PUT("/book/:bookID", controllers.UpdateBook)
+	router.DELETE("/book/:bookID", controllers.DeleteBook)
 
 	return router
 }
