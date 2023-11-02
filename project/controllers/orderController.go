@@ -67,11 +67,51 @@ func GetOrders(ctx *gin.Context) {
 }
 
 func GetOrderbyID(ctx *gin.Context) {
-	var order models.Item
+	var order models.Order
+	var item models.Item
+
 	orderID := ctx.Param("id")
+	convertedOrderID, _ := strconv.Atoi(orderID)
+
+	db := database.GetDB()
+	if db == nil {
+		panic("Error: Database connection is nil")
+	}
+
+	// get order and item
+	err := db.First(&order, "id = ?", convertedOrderID).Error
+	if err != nil {
+		msg := fmt.Sprintf("Order ID %v not found", orderID)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"data":    nil,
+			"message": msg,
+		})
+		return
+	}
+
+	err = db.First(&item, "order_id = ?", convertedOrderID).Error
+	if err != nil {
+		msg := fmt.Sprintf("Order ID %v has no Item", orderID)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"data":    nil,
+			"message": msg,
+		})
+		return
+	}
+
+	itemResult := models.ItemOrderRecv{
+		Name:        item.Name,
+		Description: item.Description,
+		Quantity:    item.Quantity,
+	}
+	result := models.ItemRecv{
+		OrderAt:      order.OrderAt,
+		CustomerName: order.Customername,
+		Items:        []models.ItemOrderRecv{itemResult},
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data":    order,
+		"data":    result,
 		"message": fmt.Sprintf("Order ID %v data", orderID),
 	})
 }
