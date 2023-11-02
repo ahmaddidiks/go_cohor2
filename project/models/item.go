@@ -8,8 +8,8 @@ type Item struct {
 	Description string `gorm:"not null"`
 	Quantity    int    `gorm:"not null"`
 	OrderID     uint
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	CreatedAt   *time.Time
+	UpdatedAt   *time.Time
 }
 
 type ItemOrderRecv struct {
