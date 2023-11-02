@@ -1,17 +1,15 @@
 package models
 
-import (
-	"time"
-)
+import "time"
 
 type Item struct {
-	ID          int    `gorm:"primaryKey"`
+	ID          uint   `gorm:"primaryKey"`
 	Name        string `gorm:"not null"`
 	Description string `gorm:"not null"`
 	Quantity    int    `gorm:"not null"`
-	OrderID     int    `gorm:"not null"`
-	CreatedAt   *time.Time
-	UpdatedAt   *time.Time
+	OrderID     uint
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type ItemOrderRecv struct {
@@ -25,8 +23,3 @@ type ItemRecv struct {
 	CustomerName string          `json:"customerName"`
 	Items        []ItemOrderRecv `json:"items"`
 }
-
-// func (b *Item) BeforeCreate(tx *gorm.DB) (err error) {
-// 	fmt.Println("Book befroe create")
-// 	return
-// }
