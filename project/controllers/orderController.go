@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"rest-api/database"
 	"rest-api/models"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -77,10 +78,71 @@ func GetOrderbyID(ctx *gin.Context) {
 
 func UpdateOrder(ctx *gin.Context) {
 	var newOrder models.ItemRecv
+	var order models.Order
+
 	orderID := ctx.Param("id")
 
 	if err := ctx.ShouldBindJSON(&newOrder); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	db := database.GetDB()
+	if db == nil {
+		panic("Error: Database connection is nil")
+	}
+
+	// check if orderID exist
+	row := db.Where("id = ?", orderID).Limit(1).Find(&order)
+	err := row.Error
+	if err != nil {
+		msg := fmt.Sprintf("Order ID %v not found", orderID)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"data":    nil,
+			"message": msg,
+		})
+		return
+	}
+	exists := row.RowsAffected > 0
+	if !exists {
+		msg := fmt.Sprintf("Order ID %v not found", orderID)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"data":    nil,
+			"message": msg,
+		})
+		return
+	}
+
+	convertedOrderID, _ := strconv.Atoi(orderID)
+	// update order , save order with desire ID it will update the desire ID
+	err = db.Save(&models.Order{
+		ID:           uint(convertedOrderID),
+		Customername: newOrder.CustomerName,
+		OrderAt:      newOrder.OrderAt,
+	}).Error
+
+	if err != nil {
+		msg := fmt.Sprintf("Update Order ID %v Failed", orderID)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"data":    nil,
+			"message": msg,
+		})
+		return
+	}
+	// update item
+	err = db.Save(&models.Item{
+		ID:          uint(convertedOrderID),
+		Name:        newOrder.Items[0].Name,
+		Description: newOrder.Items[0].Description,
+		Quantity:    newOrder.Items[0].Quantity,
+	}).Error
+
+	if err != nil {
+		msg := fmt.Sprintf("Update Item of Order ID %v Failed", orderID)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"data":    nil,
+			"message": msg,
+		})
 		return
 	}
 
