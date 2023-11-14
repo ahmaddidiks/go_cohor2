@@ -77,7 +77,7 @@ func UserLogin(ctx *gin.Context) {
 	}
 
 	token := helpers.GenerateToken(user.ID, user.Email)
-	
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"token": token,
 	})
