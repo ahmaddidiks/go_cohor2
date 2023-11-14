@@ -92,3 +92,22 @@ func UpdateBook(ctx *gin.Context) {
 		"data": Book,
 	})
 }
+
+func GetBooks(ctx *gin.Context) {
+	db := database.GetDB()
+
+	results := []models.Book{}
+
+	err := db.Debug().Preload("User").Find(&results).Error
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": results,
+	})
+}

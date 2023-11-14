@@ -109,5 +109,4 @@ func GetBooks(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"data": results,
 	})
-
 }

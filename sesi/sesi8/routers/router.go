@@ -19,6 +19,7 @@ func StartApp() *gin.Engine {
 	book := router.Group("/books")
 	{
 		book.Use(middleware.Authentication())
+		book.GET("/", controllers.GetBooks)
 		book.POST("/", controllers.CreateBook)
 		book.PUT("/:bookUUID", middleware.BookAuthorization(), controllers.UpdateBook)
 	}
