@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	jwt5 "github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 func CreateBook(ctx *gin.Context) {
@@ -26,6 +27,7 @@ func CreateBook(ctx *gin.Context) {
 	}
 
 	Book.UserID = userID
+	Book.UUID = uuid.New().String()
 
 	err := db.Debug().Create(&Book).Error
 	if err != nil {
